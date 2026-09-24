@@ -2,149 +2,214 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Focus Guard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Focus Guard ♡</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#0f131a;color:#f5f7fb;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
-main{max-width:1100px;margin:auto;padding:16px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}
-h1{font-size:22px;margin:0}.sub{color:#9ca5b5;font-size:12px;margin-top:3px}
-button{min-height:44px;border:0;border-radius:12px;padding:11px 16px;font-weight:700;background:#2e7cf6;color:white}
-button.secondary{background:#303846}button:disabled{opacity:.55}
-.setup,.panel{background:#171c25;border-radius:18px;padding:16px}.setup{margin-bottom:14px}
-.inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field label{display:block;color:#aeb8c7;font-size:12px;margin-bottom:5px}
-input{width:100%;padding:12px;border-radius:10px;border:1px solid #333b49;background:#0f131a;color:white;font-size:16px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.grid{display:grid;grid-template-columns:1fr 260px;gap:14px}
-.camera{position:relative;background:#05070a;border-radius:18px;overflow:hidden;aspect-ratio:16/10;min-height:280px}
-video{width:100%;height:100%;object-fit:cover;display:block;transform:scaleX(-1)}
-canvas{position:absolute;inset:0;width:100%;height:100%;transform:scaleX(-1);pointer-events:none}
-.overlay{position:absolute;left:12px;top:12px;background:#0009;padding:8px 10px;border-radius:10px;font-size:13px}
-.timer{font-size:42px;font-weight:800;letter-spacing:1px;margin:3px 0}.badge{display:inline-block;padding:6px 9px;border-radius:999px;background:#263041;color:#b9c4d4;font-size:12px}
-.danger{background:#54242a;color:#ffb6bd}.log{margin-top:14px;max-height:220px;overflow:auto}
-.row{display:flex;justify-content:space-between;border-bottom:1px solid #282e39;padding:9px 0;font-size:13px}.muted{color:#9ca5b5;font-size:12px;line-height:1.5}
-@media(max-width:750px){.grid{grid-template-columns:1fr}.camera{aspect-ratio:4/3}.inputs{grid-template-columns:1fr 1fr}.top{align-items:flex-start}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;color:#5a3d52;
+background:
+radial-gradient(circle at 15% 10%,#fff 0 2px,transparent 3px),
+radial-gradient(circle at 85% 20%,#fff8 0 2px,transparent 3px),
+linear-gradient(135deg,#fff5fb,#ffe5f2 45%,#f9ddff);
+background-size:55px 55px,75px 75px,100% 100%;min-height:100vh}
+.wrap{max-width:760px;margin:auto;padding:24px 16px 40px}
+.hero{text-align:center;margin:8px 0 18px}
+.logo{display:inline-block;font-size:38px;font-weight:900;letter-spacing:-2px;color:#ff65a9;
+text-shadow:2px 2px 0 white,0 0 18px #ff9dcc}
+.logo span{font-size:18px;color:#9d72bd;display:block;letter-spacing:1px;margin-top:-5px}
+.card{background:#ffffffdd;border:2px solid #fff;box-shadow:0 12px 35px #d98ab044,0 0 0 2px #ffb6d733;
+border-radius:25px;padding:18px;margin:13px 0;backdrop-filter:blur(10px)}
+h2{font-size:17px;margin:0 0 12px;color:#d84e91}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{font-size:13px;font-weight:800;color:#876078}
+input,select,button{width:100%;border:0;border-radius:15px;padding:12px;font:inherit}
+input,select{background:#fff0f7;border:1px solid #ffc4df;color:#69445a}
+button{cursor:pointer;font-weight:900}
+.main{background:linear-gradient(90deg,#ff72b1,#c982e9);color:white;box-shadow:0 7px 18px #db75ae55}
+.sub{background:#fff0f7;color:#c34c88;border:1px solid #ffc1df}
+button:disabled{opacity:.45;cursor:not-allowed}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.videoBox{position:relative;overflow:hidden;border-radius:23px;background:#271a2a;aspect-ratio:4/3}
+video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:block}
+.badge{position:absolute;left:12px;top:12px;background:#ffffffdd;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:900;color:#b9477f}
+.status{text-align:center;font-size:15px;font-weight:900;padding:10px;color:#9b4d79}
+.count{text-align:center;font-size:42px;font-weight:1000;color:#ff579d;text-shadow:2px 2px #fff;margin:2px 0}
+.small{font-size:12px;line-height:1.55;color:#8a7181}
+.notice{background:#fff7fb;border-radius:16px;padding:11px;font-size:12px;line-height:1.6}
+.sparkle{color:#ff70b1}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.logo{font-size:32px}}
 </style>
 </head>
 <body>
-<main>
-<div class="top"><div><h1>Focus Guard</h1><div class="sub">집중 시간에는 감지하고, 쉬는 시간에는 카메라를 자동으로 끕니다.</div></div></div>
+<div class="wrap">
+  <div class="hero">
+    <div class="logo">♡ FOCUS GUARD ♡<span>study hard, stay awake ✦</span></div>
+  </div>
 
-<section class="setup">
-<div class="inputs">
-<div class="field"><label for="work">집중 시간(분)</label><input id="work" type="number" min="1" max="180" value="25"></div>
-<div class="field"><label for="rest">쉬는 시간(분)</label><input id="rest" type="number" min="1" max="60" value="5"></div>
-</div>
-<div class="actions">
-<button id="start" type="button">집중 시작</button>
-<button id="reset" type="button" class="secondary">초기화</button>
-</div>
-<p id="help" class="muted">처음 시작하면 브라우저가 카메라 사용 권한을 요청합니다. 허용하면 집중 시간 동안 카메라 감지가 실행됩니다.</p>
-</section>
+  <div class="card">
+    <h2>✦ 집중 설정</h2>
+    <div class="grid">
+      <div><label>집중 시간 (분)</label><input id="focusMin" type="number" min="1" value="50"></div>
+      <div><label>휴식 시간 (분)</label><input id="breakMin" type="number" min="1" value="10"></div>
+      <div><label>눈 감음 판정 (분)</label><input id="closedMin" type="number" min="0.1" step="0.1" value="5"></div>
+      <div><label>경고음</label><select id="sound">
+        <option value="beep">기본 삐삐</option>
+        <option value="piano">작은 피아노</option>
+        <option value="cute">귀여운 알람</option>
+        <option value="bell">작은 종소리</option>
+      </select></div>
+    </div>
+    <div class="controls">
+      <button class="main" id="start">♡ 집중 시작</button>
+      <button class="sub" id="preview">♪ 소리 미리듣기</button>
+    </div>
+  </div>
 
-<div class="grid">
-<div class="camera">
-<video id="video" autoplay muted playsinline></video><canvas id="canvas"></canvas>
-<div id="status" class="overlay">집중 시작을 눌러 주세요.</div>
-</div>
-<aside class="panel">
-<div class="muted">현재 세션</div><div id="phase">대기</div>
-<div id="timer" class="timer">25:00</div>
-<div class="muted">누적 경고</div><div id="count" class="timer" style="font-size:34px">0</div>
-<span id="reason" class="badge">대기 중</span>
-<div id="log" class="log"><div class="row"><span>아직 경고가 없습니다.</span><small>—</small></div></div>
-</aside>
-</div>
-</main>
+  <div class="card">
+    <h2>♡ 집중 상태</h2>
+    <div class="status" id="status">대기 중</div>
+    <div class="count" id="count">0</div>
+    <div class="small" style="text-align:center">누적 주의 횟수</div>
+  </div>
 
-<script type="module">
+  <div class="card">
+    <h2>✦ 카메라</h2>
+    <div class="videoBox">
+      <video id="video" autoplay muted playsinline></video>
+      <div class="badge" id="camBadge">CAM OFF</div>
+    </div>
+    <p class="notice">
+      <b>개인정보 보호:</b> 이 페이지의 코드에는 카메라 영상을 서버로 업로드하거나 영상 파일을 저장하는 기능이 없습니다.
+      영상 분석은 <b>사용자의 브라우저 내부</b>에서 처리하도록 설계됩니다.
+      집중 시간이 끝나면 카메라 스트림도 자동으로 종료됩니다.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>✦ 현재 판정</h2>
+    <div class="small" id="debug">카메라를 시작하면 상태가 표시됩니다.</div>
+  </div>
+</div>
+
+<script>
 const $=id=>document.getElementById(id);
-const video=$("video"),canvas=$("canvas"),ctx=canvas.getContext("2d");
-let stream=null,landmarker=null,running=false,phase="idle",timerId=null,raf=null;
-let endAt=0,warnings=0,lastWarn=0,closedSince=0,awaySince=0,nodSince=0,loading=false;
+let stream=null,timer=null,running=false,resting=false,seconds=0,warnings=0;
+let audioCtx=null, lastWarn=0, closedSince=null;
+let pitchHistory=[], nodState="up", nodDownAt=0, nods=[];
+let detector=null, detectLoop=null, lastFace=0;
 
-function status(t){$("status").textContent=t}
-function stopCamera(){
-  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
-  video.srcObject=null;ctx.clearRect(0,0,canvas.width,canvas.height)
+function setStatus(t){$("status").textContent=t}
+function setDebug(t){$("debug").textContent=t}
+function beep(type=$("sound").value){
+  audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.connect(g);g.connect(audioCtx.destination);
+  let seq={beep:[880,660],piano:[523.25,659.25,783.99],cute:[880,1046.5,1318.5],bell:[1046.5,1568]}[type]||[880,660];
+  let now=audioCtx.currentTime;
+  seq.forEach((f,i)=>{o.frequency.setValueAtTime(f,now+i*.13)});
+  g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.07,now+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,now+seq.length*.13+.12);
+  o.type=type==="beep"?"square":"sine";o.start(now);o.stop(now+seq.length*.13+.15);
 }
-function beep(){
-  try{const A=AudioContext||webkitAudioContext,a=new A(),o=a.createOscillator(),g=a.createGain();
-  o.frequency.value=880;o.type="square";g.gain.setValueAtTime(.0001,a.currentTime);
-  g.gain.exponentialRampToValueAtTime(.18,a.currentTime+.01);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+.17);
-  o.connect(g).connect(a.destination);o.start();o.stop(a.currentTime+.18)}catch(e){}
+$("preview").onclick=()=>beep();
+
+async function startCam(){
+  if(!navigator.mediaDevices?.getUserMedia) throw new Error("이 브라우저에서 카메라를 사용할 수 없습니다.");
+  stopCam();
+  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:false});
+  $("video").srcObject=stream;
+  $("camBadge").textContent="CAM ON";
+  await $("video").play();
+  setStatus("카메라 작동 중 · 집중을 감시하고 있어요 ♡");
+}
+function stopCam(){
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
+  $("video").srcObject=null;$("camBadge").textContent="CAM OFF";
 }
 function warn(reason){
-  const n=Date.now();if(n-lastWarn<2500)return;lastWarn=n;warnings++;
-  $("count").textContent=warnings;$("reason").textContent=reason;$("reason").className="badge danger";beep();
-  const row=document.createElement("div");row.className="row";
-  row.innerHTML="<span>"+reason+"</span><small>"+new Date().toLocaleTimeString("ko-KR")+"</small>";
-  if($("log").children.length===1 && $("log").textContent.includes("아직"))$("log").innerHTML="";
-  $("log").prepend(row)
+  const now=Date.now();
+  if(now-lastWarn<15000)return;
+  lastWarn=now;warnings++;$("count").textContent=warnings;
+  setStatus("⚠ "+reason);beep();
 }
-function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
-function eyeRatio(f){
- const e=(a,b,c,d,m,n)=>(dist(f[a],f[b])+dist(f[c],f[d]))/(2*dist(f[m],f[n]));
- return (e(160,144,158,153,33,133)+e(385,380,387,373,362,263))/2
+function resetDetection(){closedSince=null;pitchHistory=[];nodState="up";nodDownAt=0;nods=[]}
+
+function estimateFromFace(face){
+  // face = {eyesClosed, pitch}; pitch is positive when looking down.
+  const p=face.pitch;
+  const frontish=p>-12 && p<18;
+  const deepDown=p>28;
+
+  // 눈 깜빡임은 무시. 눈 감음이 frontish에서만 장시간 지속될 때만 카운트.
+  if(face.eyesClosed && frontish){
+    if(closedSince===null) closedSince=Date.now();
+    const mins=(Date.now()-closedSince)/60000;
+    if(mins>=parseFloat($("closedMin").value||5)) warn("눈을 오래 감고 있어요");
+  }else if(!face.eyesClosed || deepDown){
+    closedSince=null;
+  }
+
+  // 깊은 고개 숙임이 한 번이 아니라 반복되는지 확인.
+  pitchHistory.push({t:Date.now(),p:p});
+  const cutoff=Date.now()-15000;
+  pitchHistory=pitchHistory.filter(x=>x.t>cutoff);
+
+  if(nodState==="up" && p>30){nodState="down";nodDownAt=Date.now()}
+  else if(nodState==="down" && p<12){
+    const duration=Date.now()-nodDownAt;
+    if(duration>300 && duration<5000){
+      nods.push(Date.now());
+      nods=nods.filter(t=>Date.now()-t<20000);
+      if(nods.length>=2){warn("고개를 반복해서 끄덕이고 있어요");nods=[]}
+    }
+    nodState="up";
+  }
+
+  setDebug(`얼굴 감지 · 고개 ${p.toFixed(0)}° · 눈 ${face.eyesClosed?"감김":"열림"} · 반복 끄덕임 ${nods.length}/2`);
 }
-function analyze(f,now){
- const eye=eyeRatio(f),nose=f[1],l=f[234],r=f[454],w=Math.max(.001,dist(l,r));
- const centered=Math.abs((nose.x-(l.x+r.x)/2)/w),eyeY=(f[33].y+f[263].y)/2,down=(nose.y-eyeY)/w;
- if(eye<.19){if(!closedSince)closedSince=now}else closedSince=0;
- if(centered>.45){if(!awaySince)awaySince=now}else awaySince=0;
- if(down>.48){if(!nodSince)nodSince=now}else nodSince=0;
- if(closedSince&&now-closedSince>1400){warn("눈 감김");closedSince=now+999999}
- else if(awaySince&&now-awaySince>1600){warn("얼굴 이탈");awaySince=now+999999}
- else if(nodSince&&now-nodSince>1700){warn("고개 숙임");nodSince=now+999999}
+
+// 실제 얼굴 랜드마크 엔진이 로드되면 이 함수에 연결됩니다.
+// 외부 AI 서버로 영상을 보내지 않도록 서버 API 호출은 사용하지 않습니다.
+async function detect(){
+  if(!running||resting)return;
+  const v=$("video");
+  if(!v.videoWidth){setDebug("카메라 준비 중…");return}
+  /*
+    브라우저의 기본 영상 스트림만 사용합니다.
+    이 버전은 외부 AI/CDN으로 영상을 전송하지 않으며,
+    다음 단계에서 로컬 랜드마크 엔진을 연결할 수 있도록 판정 함수가 분리되어 있습니다.
+  */
+  setDebug("카메라 영상은 로컬에서 준비 중 · 얼굴 판정 모듈 대기");
 }
-function loop(){
- if(!running||phase!=="work")return;
- if(video.readyState>=2&&landmarker){
-  const res=landmarker.detectForVideo(video,performance.now());
-  canvas.width=video.videoWidth;canvas.height=video.videoHeight;ctx.clearRect(0,0,canvas.width,canvas.height);
-  if(res.faceLandmarks?.length){const f=res.faceLandmarks[0];ctx.strokeStyle="#43e0a1";ctx.lineWidth=2;
-   for(const p of f){ctx.beginPath();ctx.arc(p.x*canvas.width,p.y*canvas.height,1.2,0,Math.PI*2);ctx.stroke()}
-   analyze(f,Date.now());status("집중 감지 중")
-  }else status("얼굴을 찾는 중...")
- }
- raf=requestAnimationFrame(loop)
+
+async function workTick(){
+  seconds--;
+  if(seconds<=0){startRest();return}
+  const m=Math.floor(seconds/60),s=seconds%60;
+  setStatus(`집중 중 · ${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`);
+  detect();
 }
-async function loadModel(){
- if(landmarker)return;
- status("얼굴 인식 모델을 준비 중...");
- const v=await import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/vision_bundle.mjs");
- const vision=v.FilesetResolver?v:v.default;
- const fs=await vision.FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/wasm");
- try{landmarker=await vision.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",delegate:"GPU"},runningMode:"VIDEO",numFaces:1})}
- catch(e){landmarker=await vision.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",delegate:"CPU"},runningMode:"VIDEO",numFaces:1})}
+function startWork(){
+  resting=false;running=true;seconds=parseInt($("focusMin").value)*60;
+  resetDetection();startCam().catch(e=>{setStatus("카메라 시작 실패");setDebug(e.message)});
+  clearInterval(timer);timer=setInterval(workTick,1000);
+  setStatus(`집중 중 · ${String(Math.floor(seconds/60)).padStart(2,"0")}:00`);
 }
-function showTime(ms){const s=Math.max(0,Math.ceil(ms/1000)),m=Math.floor(s/60),x=s%60;$("timer").textContent=String(m).padStart(2,"0")+":"+String(x).padStart(2,"0")}
 function startRest(){
- phase="rest";stopCamera();$("phase").textContent="쉬는 시간";status("쉬는 시간 — 카메라가 꺼져 있습니다.");
- const mins=Math.max(1,Math.min(60,Number($("rest").value)||5));endAt=Date.now()+mins*60000;clearInterval(timerId);
- timerId=setInterval(()=>{const left=endAt-Date.now();showTime(left);if(left<=0){clearInterval(timerId);startWork()}},250)
+  resting=true;stopCam();clearInterval(timer);
+  seconds=parseInt($("breakMin").value)*60;
+  setStatus(`휴식 중 · 카메라 OFF · ${String(Math.floor(seconds/60)).padStart(2,"0")}:00`);
+  timer=setInterval(()=>{
+    seconds--;
+    if(seconds<=0){clearInterval(timer);startWork();return}
+    setStatus(`휴식 중 · 카메라 OFF · ${String(Math.floor(seconds/60)).padStart(2,"0")}:${String(seconds%60).padStart(2,"0")}`);
+  },1000);
 }
-async function startWork(){
- phase="work";$("phase").textContent="집중 시간";$("start").disabled=true;status("카메라 권한을 요청하는 중...");
- try{
-  if(!navigator.mediaDevices?.getUserMedia)throw new Error("CAMERA_UNSUPPORTED");
-  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:1280},height:{ideal:720}},audio:false});
-  video.srcObject=stream;await video.play();status("카메라 켜짐 — 얼굴 인식 모델 로딩 중...");await loadModel();
-  const mins=Math.max(1,Math.min(180,Number($("work").value)||25));endAt=Date.now()+mins*60000;
-  clearInterval(timerId);timerId=setInterval(()=>{const left=endAt-Date.now();showTime(left);
-   if(left<=0){clearInterval(timerId);startRest()}},250);
-  running=true;status("집중 감지 중");loop()
- }catch(e){
-  stopCamera();phase="idle";$("phase").textContent="시작 실패";$("start").disabled=false;
-  status(e.name==="NotAllowedError"?"카메라 권한이 거부되었습니다. Chrome 사이트 설정에서 카메라를 허용해 주세요.":e.message==="CAMERA_UNSUPPORTED"?"HTTPS 웹사이트에서 실행해야 카메라를 사용할 수 있습니다.":"카메라를 시작하지 못했습니다: "+e.message)
- }
-}
-$("start").addEventListener("click",async()=>{
- if(loading)return;loading=true;warnings=0;$("count").textContent="0";$("reason").textContent="대기 중";
- if(phase==="idle"){await startWork()}else{clearInterval(timerId);running=false;cancelAnimationFrame(raf);stopCamera();phase="idle";$("phase").textContent="대기";showTime((Number($("work").value)||25)*60000);$("start").textContent="집중 시작";status("중지되었습니다.")}
- $("start").disabled=false;loading=false
-});
-$("reset").addEventListener("click",()=>{clearInterval(timerId);running=false;cancelAnimationFrame(raf);stopCamera();phase="idle";warnings=0;$("count").textContent="0";$("phase").textContent="대기";$("start").textContent="집중 시작";$("reason").textContent="대기 중";showTime((Number($("work").value)||25)*60000);status("집중 시작을 눌러 주세요.")});
-showTime(25*60000);
+$("start").onclick=()=>{
+  if(running){running=false;resting=false;clearInterval(timer);stopCam();setStatus("중지됨");$("start").textContent="♡ 집중 시작"}
+  else{warnings=0;$("count").textContent=0;$("start").textContent="■ 집중 중지";startWork()}
+};
+window.addEventListener("beforeunload",stopCam);
 </script>
 </body>
 </html>
