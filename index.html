@@ -111,9 +111,11 @@ function loop(){
 async function loadModel(){
  if(landmarker)return;
  status("얼굴 인식 모델을 준비 중...");
- const v=await import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/vision_bundle.mjs");
- const fs=await v.FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm");
- landmarker=await v.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",delegate:"GPU"},runningMode:"VIDEO",numFaces:1})
+ const v=await import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/vision_bundle.mjs");
+ const vision=v.FilesetResolver?v:v.default;
+ const fs=await vision.FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/wasm");
+ try{landmarker=await vision.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",delegate:"GPU"},runningMode:"VIDEO",numFaces:1})}
+ catch(e){landmarker=await vision.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",delegate:"CPU"},runningMode:"VIDEO",numFaces:1})}
 }
 function showTime(ms){const s=Math.max(0,Math.ceil(ms/1000)),m=Math.floor(s/60),x=s%60;$("timer").textContent=String(m).padStart(2,"0")+":"+String(x).padStart(2,"0")}
 function startRest(){
@@ -126,7 +128,7 @@ async function startWork(){
  try{
   if(!navigator.mediaDevices?.getUserMedia)throw new Error("CAMERA_UNSUPPORTED");
   stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:1280},height:{ideal:720}},audio:false});
-  video.srcObject=stream;await video.play();await loadModel();
+  video.srcObject=stream;await video.play();status("카메라 켜짐 — 얼굴 인식 모델 로딩 중...");await loadModel();
   const mins=Math.max(1,Math.min(180,Number($("work").value)||25));endAt=Date.now()+mins*60000;
   clearInterval(timerId);timerId=setInterval(()=>{const left=endAt-Date.now();showTime(left);
    if(left<=0){clearInterval(timerId);startRest()}},250);
